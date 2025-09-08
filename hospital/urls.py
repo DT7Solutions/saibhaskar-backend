@@ -11,6 +11,7 @@ urlpatterns = [
     path('unblock-date/<int:doctor_id>/<str:date>/', unblock_date, name='unblock_date'),
     path("book-appointment/", book_appointment, name="book_appointment"),
     path("appointments/<int:doctor_id>/", get_appointments, name="get_appointments"),
+    path('update-appointment-status/', update_appointment_status, name='update_appointment_status'),
 
 
 

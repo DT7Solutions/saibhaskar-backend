@@ -13,7 +13,6 @@ from .serializers import *
 # Create your views here.
 
 
-
 # ✅ Get all users
 @api_view(['GET'])
 def get_users(request):
@@ -164,23 +163,45 @@ def get_appointments(request, doctor_id):  # doctor_id now comes from URL
     return JsonResponse({
         "today": [
             {
+                "id": appt.id, 
                 "user_name": appt.patient.name,
                 "user_email": appt.patient.email,
                 "user_phone": appt.patient.phone,
                 "appointment_date": appt.appointment_date.strftime("%Y-%m-%d"),
+                "status": appt.status
             }
             for appt in today_appointments
         ],
         "upcoming": [
             {
+                "id": appt.id, 
                 "user_name": appt.patient.name,
                 "user_email": appt.patient.email,
                 "user_phone": appt.patient.phone,
                 "appointment_date": appt.appointment_date.strftime("%Y-%m-%d"),
+                "status": appt.status
             }
             for appt in upcoming_appointments
         ]
     })
+
+# update appointment status 
+@api_view(['POST'])
+def update_appointment_status(request):
+ 
+    new_status = "completed"
+    print(new_status)
+    # if not new_status:
+    #     return Response({"error": "Status not provided"}, status=400)
+
+    # try:
+    #     appointment = Appointment.objects.get(pk=pk)
+    #     appointment.status = new_status
+    #     appointment.save()
+    #     return Response({"success": True, "id": appointment.id, "status": appointment.status})
+    # except Appointment.DoesNotExist:
+    #     return Response({"error": "Appointment not found"}, status=404)
+
 
 
 
