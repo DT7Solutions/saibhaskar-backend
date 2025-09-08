@@ -6,6 +6,7 @@ from simple_history.models import HistoricalRecords
 # -------------------------------
 # User Manager
 # -------------------------------
+
 class UserManager(BaseUserManager):
     def create_user(self, email, username, phone, password=None):
         if not email:
@@ -112,8 +113,9 @@ class Appointment(models.Model):
 
     patient = models.ForeignKey(Patient, on_delete=models.CASCADE)
     doctor = models.ForeignKey(Users, on_delete=models.CASCADE, limit_choices_to={'role__role_category': 'doctor'})
+    service = models.CharField(max_length=100,default="")
     appointment_date = models.DateField()
-    appointment_time = models.TimeField()
+    appointment_time = models.TimeField(null=True, blank=True)
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default="pending")
     created_at = models.DateTimeField(auto_now_add=True)
 

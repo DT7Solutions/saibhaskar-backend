@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Users
+from .models import *
 
 class UsersSerializer(serializers.ModelSerializer):
     class Meta:
@@ -10,3 +10,9 @@ class UsersSerializer(serializers.ModelSerializer):
 class UserLoginSerializer(serializers.Serializer):
     email = serializers.EmailField()
     password = serializers.CharField(write_only=True)
+
+class DoctorUnavailableDateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = DoctorUnavailableDate
+        fields = '__all__'
+    
