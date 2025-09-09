@@ -15,4 +15,13 @@ class DoctorUnavailableDateSerializer(serializers.ModelSerializer):
     class Meta:
         model = DoctorUnavailableDate
         fields = '__all__'
+
+class ChangePasswordSerializer(serializers.Serializer):
+    current_password = serializers.CharField(required=True)
+    new_password = serializers.CharField(required=True, min_length=6)
+    confirm_password = serializers.CharField(required=True)
     
+    def validate(self, attrs):
+        if attrs['new_password'] != attrs['confirm_password']:
+            raise serializers.ValidationError("New passwords do not match")
+        return attrs

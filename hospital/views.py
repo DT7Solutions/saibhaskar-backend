@@ -5,6 +5,7 @@ from rest_framework.response import Response
 from rest_framework import status,generics
 from django.utils.dateparse import parse_date
 from django.utils.timezone import now
+from django.contrib.auth.hashers import check_password,make_password
 from .models import *
 from django.contrib.auth import authenticate,get_user_model
 from django.http import JsonResponse
@@ -49,6 +50,8 @@ def login_view(request):
                     "email": user.email,
                     "fname": user.first_name,
                     "lname": user.last_name,
+                    "username":user.username,
+                    "phonenumber":user.phone,
                     "role": user.role.role_category if hasattr(user, 'role') and user.role else None,
                 },
                 "message": "Login successful",
@@ -187,20 +190,104 @@ def get_appointments(request, doctor_id):  # doctor_id now comes from URL
 
 # update appointment status 
 @api_view(['POST'])
-def update_appointment_status(request):
- 
-    new_status = "completed"
-    print(new_status)
-    # if not new_status:
-    #     return Response({"error": "Status not provided"}, status=400)
+def update_appointment_status(request, id, status):
+    if not status:
+        return Response({"error": "Status not provided"}, status=400)
+   
+    try:
+        appointment = Appointment.objects.get(pk=id)
+        appointment.status = status
+        appointment.save()
+        return Response({"success": True, "id": appointment.id, "status": appointment.status})
+    except Appointment.DoesNotExist:
+        return Response({"error": "Appointment not found"}, status=404)
+    
+# profile save and update 
+@api_view(['GET', 'PUT'])
+def user_profile(request, user_id):
+    try:
+        user = Users.objects.get(id=user_id)
+    except Users.DoesNotExist:
+        return Response({"error": "User not found"}, status=status.HTTP_404_NOT_FOUND)
 
-    # try:
-    #     appointment = Appointment.objects.get(pk=pk)
-    #     appointment.status = new_status
-    #     appointment.save()
-    #     return Response({"success": True, "id": appointment.id, "status": appointment.status})
-    # except Appointment.DoesNotExist:
-    #     return Response({"error": "Appointment not found"}, status=404)
+    if request.method == 'GET':
+        return Response({
+            "id": user.id,
+            "email": user.email,
+            "fname": user.first_name,
+            "lname": user.last_name,
+            "username": user.username,
+            "phonenumber": user.phone,
+            "date_of_birth": user.date_of_birth,
+            "pincode": user.pincode,
+            "address": user.address,
+        })
+
+    elif request.method == 'PUT':
+        # Handle the field name mapping for updates
+        data = request.data
+        
+        # Map frontend field names to model field names and update
+        if 'fname' in data:
+            user.first_name = data['fname']
+        if 'lname' in data:
+            user.last_name = data['lname']
+        if 'phonenumber' in data:
+            user.phone = data['phonenumber']
+        if 'username' in data:
+            user.username = data['username']
+        if 'email' in data:
+            user.email = data['email']
+        if 'date_of_birth' in data:
+            user.date_of_birth = data['date_of_birth']
+        if 'pincode' in data:
+            user.pincode = data['pincode']
+        if 'address' in data:
+            user.address = data['address']
+            
+        user.save()
+        
+        return Response({
+            "id": user.id,
+            "email": user.email,
+            "fname": user.first_name,
+            "lname": user.last_name,
+            "username": user.username,
+            "phonenumber": user.phone,
+            "date_of_birth": user.date_of_birth,
+            "pincode": user.pincode,
+            "address": user.address,
+        })
+
+# change password 
+@api_view(['PUT'])
+def change_password(request, user_id):
+    x = user_id
+    try:
+        user = Users.objects.get(id=user_id)
+    except Users.DoesNotExist:
+        return Response({"message": "User not found"}, status=404)
+
+    serializer = ChangePasswordSerializer(data=request.data)
+    if not serializer.is_valid():
+        return Response({"message": list(serializer.errors.values())[0][0]}, status=400)
+
+    current_password = serializer.validated_data['current_password']
+    new_password = serializer.validated_data['new_password']
+
+    # Use model method check_password
+    if not user.check_password(current_password):
+        return Response({"message": "Current password is incorrect"}, status=400)
+
+    if user.check_password(new_password):
+        return Response({"message": "New password must be different"}, status=400)
+
+    # Set new password and save
+    user.password = make_password(new_password)
+    user.save()
+
+    return Response({"message": "Password updated successfully"}, status=200)
+
 
 
 
