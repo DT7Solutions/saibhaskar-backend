@@ -9,11 +9,12 @@ https://docs.djangoproject.com/en/5.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.2/ref/settings/
 """
-
+import os 
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+STATIC_DIRS = os.path.join(BASE_DIR,"static")
 
 
 # Quick-start development settings - unsuitable for production
@@ -26,6 +27,7 @@ SECRET_KEY = 'django-insecure-sz6o6j*^17#gw%q&dd*2s$rh6u5e!bj8^u7h%l4p7@lr31nex+
 DEBUG = True
 
 ALLOWED_HOSTS = []
+# '91.108.110.206','codkraft.com','www.codkraft.com'
 
 
 CORS_ALLOW_CREDENTIALS = True
@@ -33,7 +35,7 @@ CORS_ALLOW_ALL_ORIGINS = True
 CORS_ALLOWED_ORIGINS = [
     "https://127.0.0.1:5500",  
 ]
-
+# '91.108.110.206','codkraft.com','www.codkraft.com'
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -140,6 +142,16 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
 
 STATIC_URL = 'static/'
+ 
+ 
+STATIC_DIRS = os.path.join(BASE_DIR, 'static')
+ 
+if DEBUG:
+    STATICFILES_DIRS = [STATIC_DIRS]  
+else:
+    STATIC_ROOT = STATIC_DIRS 
+ 
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
