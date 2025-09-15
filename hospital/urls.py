@@ -15,7 +15,4 @@ urlpatterns = [
     path('user-profile/<int:user_id>/', user_profile, name='user_profile'),
     path('change-password/<int:user_id>/', change_password, name='change_password'),
 
-
-
-
 ]

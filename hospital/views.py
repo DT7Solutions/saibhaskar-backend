@@ -6,6 +6,7 @@ from rest_framework import status,generics
 from django.utils.dateparse import parse_date
 from django.utils.timezone import now
 from django.contrib.auth.hashers import check_password,make_password
+from .emails import send_appointment_email 
 from .models import *
 from django.contrib.auth import authenticate,get_user_model
 from django.http import JsonResponse
@@ -198,6 +199,14 @@ def update_appointment_status(request, id, status):
         appointment = Appointment.objects.get(pk=id)
         appointment.status = status
         appointment.save()
+        # Send email to patient
+        if appointment.patient.email:
+            send_appointment_email(
+                user_email=appointment.patient.email,
+                patient_name=appointment.patient.name,
+                appointment=appointment,
+                status=status
+            )
         return Response({"success": True, "id": appointment.id, "status": appointment.status})
     except Appointment.DoesNotExist:
         return Response({"error": "Appointment not found"}, status=404)
@@ -287,6 +296,8 @@ def change_password(request, user_id):
     user.save()
 
     return Response({"message": "Password updated successfully"}, status=200)
+
+
 
 
 
