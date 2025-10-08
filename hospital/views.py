@@ -33,7 +33,6 @@ def get_user_detail(request, pk):
     serializer = UsersSerializer(user)
     return Response(serializer.data, status=status.HTTP_200_OK)
 
-
 # login 
 @api_view(['POST'])
 def login_view(request):
