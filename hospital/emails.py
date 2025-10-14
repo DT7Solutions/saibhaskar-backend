@@ -29,7 +29,7 @@ Please show this email when you arrive.
 Best regards,  
 BMR-Saibhaskar Hospitals
 
-Contact: vanishaannadasu@gmail.com
+Contact: bmrsaibhaskarhospitals@gmail.com
         """
     elif status.lower() == "cancelled":
         message = f"""
@@ -47,7 +47,7 @@ Please contact us to reschedule.
 Best regards,  
 BMR-Saibhaskar Hospitals
 
-Contact: vanishaannadasu@gmail.com
+Contact: bmrsaibhaskarhospitals@gmail.com
         """
     else:
         message = f"""
@@ -63,7 +63,7 @@ Appointment Details:
 Best regards,  
 BMR-Saibhaskar Hospitals
 
-Contact: vanishaannadasu@gmail.com
+Contact: bmrsaibhaskarhospitals@gmail.com
         """
 
     send_mail(
