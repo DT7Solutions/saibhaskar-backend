@@ -25,17 +25,18 @@ STATIC_DIRS = os.path.join(BASE_DIR,"static")
 SECRET_KEY = 'django-insecure-sz6o6j*^17#gw%q&dd*2s$rh6u5e!bj8^u7h%l4p7@lr31nex+'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['91.108.110.206','codkraft.com','www.codkraft.com']
 # '91.108.110.206','codkraft.com','www.codkraft.com'
 
 
 CORS_ALLOW_CREDENTIALS = True
 CORS_ALLOW_ALL_ORIGINS = True
 CORS_ALLOWED_ORIGINS = [
-    "https://127.0.0.1:5500",  
+    "https://frontend.codkraft.com",  
 ]
+# https://127.0.0.1:5500 
 # '91.108.110.206','codkraft.com','www.codkraft.com'
 
 INSTALLED_APPS = [
