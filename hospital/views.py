@@ -144,6 +144,7 @@ def book_appointment(request):
         Appointment.objects.create(
             patient=patient,
             doctor=doctor,
+            branch= data.get("branch"),
             service=data.get("service"),
             appointment_date=parse_date(data.get("appointment_date")),
             status="pending"
@@ -171,6 +172,7 @@ def get_appointments(request, doctor_id):  # doctor_id now comes from URL
                 "user_name": appt.patient.name,
                 "user_email": appt.patient.email,
                 "user_phone": appt.patient.phone,
+                "branch": appt.branch,
                 "appointment_date": appt.appointment_date.strftime("%Y-%m-%d"),
                 "status": appt.status
             }
@@ -183,6 +185,8 @@ def get_appointments(request, doctor_id):  # doctor_id now comes from URL
                 "user_email": appt.patient.email,
                 "user_phone": appt.patient.phone,
                 "appointment_date": appt.appointment_date.strftime("%Y-%m-%d"),
+                "branch": appt.branch,
+                
                 "status": appt.status
             }
             for appt in upcoming_appointments

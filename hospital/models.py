@@ -112,6 +112,7 @@ class Appointment(models.Model):
     )
 
     patient = models.ForeignKey(Patient, on_delete=models.CASCADE)
+    branch = models.CharField(max_length=100, null=True, blank=True, default="guntur")
     doctor = models.ForeignKey(Users, on_delete=models.CASCADE, limit_choices_to={'role__role_category': 'doctor'})
     service = models.CharField(max_length=100,default="")
     appointment_date = models.DateField()
