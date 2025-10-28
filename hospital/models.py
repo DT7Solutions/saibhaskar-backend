@@ -90,7 +90,7 @@ class Users(AbstractBaseUser, PermissionsMixin):
     history = HistoricalRecords()
 
     def __str__(self):
-        return self.username
+        return f"{self.username} (ID: {self.id})"
 
     class Meta:
         db_table = "users"
